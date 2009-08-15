@@ -53,6 +53,9 @@ public final class BestFirstAgent extends RedditAgent implements Agent
 		if(s.dead)
 			return Float.POSITIVE_INFINITY;
 
+		if(nextWaypoint == null)
+			return MarioMath.stepsToRun(s.x + 160, s.xa);
+
 		float stepsx = Math.abs(MarioMath.stepsToRun(nextWaypoint.x - s.x, s.xa));
 		float stepsy = 0;
 		// if we are moving upwards, we need to go to ymin at least
@@ -113,13 +116,8 @@ public final class BestFirstAgent extends RedditAgent implements Agent
 			pathplan.reset(ws);
 			nextWaypoint = pathplan.getNextWaypoint(initialState.x, initialState.xa);
 		}
-
-		// we have nowhere to go, so do nothing!
-		if(nextWaypoint == null) {
-			if(verbose1)
-				System.out.printf("no plan; trying default\n");
-			nextWaypoint = PathPlanner.defaultWaypoint(initialState);
-			//return 0;
+		while(nextWaypoint != null && initialState.x > nextWaypoint.x && initialState.ya <= 0) {
+			nextWaypoint = pathplan.getNextWaypoint(nextWaypoint.x, initialState.xa);
 		}
 
 		initialState.cost = cost(initialState, initialState);

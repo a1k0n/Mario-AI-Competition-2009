@@ -21,6 +21,7 @@ public final class PathPlanner
 	// jumpUpSteps[y] number of steps taken to jump onto a platform y blocks higher
 	static final int jumpUpSteps[] = { 0,7,7,8,9 };
 	static final int xaSteps = 19;
+	static final int xMax = 21;
 	private WorldState ws;
 
 	PathPlanner() {
@@ -50,8 +51,8 @@ public final class PathPlanner
 		if(y1 == y0 && min_y == y0) {
 			// just run forward
 			float g = MarioMath.stepsToRun(16*(x1-x0), xa);
-			//xa = MarioMath.runSpeed(xa, g);
-			return g + calc(x1, MarioMath.runSpeed(xa, g));
+			xa = MarioMath.runSpeed(xa, g);
+			return g + calc(x1, xa);
 		} else if(min_y < y0) { // do we need to jump?
 			// can we jump high enough?
 			if(min_y-y0 < -4)
@@ -96,6 +97,7 @@ public final class PathPlanner
 	private static final float from_xaIdx(int xaidx) {
 		if(xaidx == 0)
 			return 0;
+		xaidx -= xaSteps;
 		float mag = (float) (9.70909 * (1-Math.exp(-0.116534*Math.abs(xaidx))));
 		return xaidx < 0 ? -mag : mag;
 	}
@@ -103,17 +105,19 @@ public final class PathPlanner
 	// generate a plan for the level using dynamic programming which is a fancy
 	// way of saying we memoize partial results while searching for a global optimum
 	private float calc(int x, float xa) {
-		if(x >= 22) return 0;
+		if(x >= xMax) return 0;
 		int xaidx = xaIdx(xa); // i bet i could make this even more confusing if i tried
 		if(goal[x][xaidx] != null)
 			return goal[x][xaidx].cost;
 
+		System.out.printf("xa=%f xaidx=%d", xa,xaidx);
 		xa = from_xaIdx(xaidx); // canonicalize
+		System.out.printf(" -> xa=%f\n", xa);
 
 		int y0 = ws.heightmap[x];
 		int min_y = y0;
 		Waypoint w = null;
-		for(int i=x+1;i<22;i++) {
+		for(int i=x+1;i<xMax;i++) {
 			int y1 = ws.heightmap[i];
 			if(y1 < min_y)
 				min_y = y1;
@@ -128,6 +132,8 @@ public final class PathPlanner
 			if(c == Float.POSITIVE_INFINITY)
 				continue;
 
+			System.out.printf("moveCost(%d,%d, %d,%d, %d, %d) -> cost=%f\n",
+					x, y0, i,y1, min_y, xaidx, c);
 			if(w == null) {
 				w = new Waypoint();
 				w.cost = Float.POSITIVE_INFINITY;
@@ -140,8 +146,10 @@ public final class PathPlanner
 			}
 		}
 		goal[x][xaidx] = w;
-		if(w == null) // end of plan?
+		if(w == null) { // end of plan?
+			System.out.printf("goal[%d][%d] -> null\n", x,xaidx);
 			return 0;
+		}
 		else {
 			System.out.printf("goal[%d][%d] -> (%d,%d) cost=%f\n",
 					x,xaidx, w.x,w.y, w.cost);
@@ -154,13 +162,15 @@ public final class PathPlanner
 			return null;
 
 		int x = (int)_x/16 - ws.MapX;
+		if(x >= xMax)
+			return null;
 		calc(x, xa);
 		return goal[x][xaIdx(xa)];
 	}
 
 	public void reset(WorldState _ws) {
 		ws = _ws;
-		for(int x=0;x<22;x++)
+		for(int x=0;x<xMax;x++)
 			for(int xa=0;xa<(xaSteps*2+1);xa++)
 				goal[x][xa] = null;
 	}

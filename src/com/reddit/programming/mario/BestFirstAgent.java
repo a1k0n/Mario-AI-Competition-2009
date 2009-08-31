@@ -19,8 +19,6 @@ public final class BestFirstAgent extends HeuristicSearchingAgent implements Age
 		pq = new PrioQ(Tunables.MaxBreadth);
 	}
 
-
-
 	@Override
 	protected int searchForAction(MarioState initialState, WorldState ws) {
 		DebugPolyLine line1;
@@ -79,9 +77,7 @@ public final class BestFirstAgent extends HeuristicSearchingAgent implements Age
 				float h = cost(ms, initialState);
 				ms.g = next.g + Tunables.GIncrement;
 				ms.cost = ms.g + h + ((a/MarioState.ACT_JUMP)>0?Tunables.FeetOnTheGroundBonus:0);
-
 				bestfound = marioMin(ms,bestfound);
-
 				if (h < 0.1f)
 				{
 					if (!goalFound)

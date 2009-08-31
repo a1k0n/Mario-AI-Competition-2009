@@ -2,10 +2,6 @@ package com.reddit.programming.mario;
 
 public final class BulletBillState extends SpriteState
 {
-	// we need to simulate enemy death, too, cuz it doesn't tell us whether
-	// we're looking at dead enemies
-	public int deadTime = 0;
-
 	public static final float width = 4;
 
 	@Override
@@ -63,7 +59,7 @@ public final class BulletBillState extends SpriteState
 	}
 
 	@Override
-	public SpriteState stomp(WorldState ws) {
+	public SpriteState stomp(WorldState ws, MarioState ms) {
 		BulletBillState e = (BulletBillState) clone();
 		e.xa = 0;
 		e.ya = 1;

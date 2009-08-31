@@ -38,9 +38,9 @@ public class CompetitionScore {
 
         double competitionScore = 0;
 
-        competitionScore += testConfig (controller, options, startingSeed, 0, false);
-        competitionScore += testConfig (controller, options, startingSeed, 3, false);
-        competitionScore += testConfig (controller, options, startingSeed, 5, false);
+//        competitionScore += testConfig (controller, options, startingSeed, 0, false);
+//        competitionScore += testConfig (controller, options, startingSeed, 3, false);
+//        competitionScore += testConfig (controller, options, startingSeed, 5, false);
         competitionScore += testConfig (controller, options, startingSeed, 10, false);
         System.out.println("Competition score: " + competitionScore);
         return competitionScore;

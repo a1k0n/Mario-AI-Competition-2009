@@ -34,7 +34,7 @@ public class TweakRunner {
 		for (int i = 0; i<best.length; ++i)
 			settings[i] = best[i];
 			
-		int parameter = 7;
+		int parameter = -1;
 
 		float bestScore = -1e10f;		
 			
@@ -60,7 +60,6 @@ public class TweakRunner {
 				score = DoRun();
 			else
 				score = -1e10f;
-			score -= Tunables.MaxBreadth;
 			if (score > bestScore)
 			{
 				bestScore = score;
@@ -94,7 +93,7 @@ public class TweakRunner {
 	
 	private static float DoRun()
 	{
-			return(float)CompetitionScore.score(new BestFirstAgent(), 0);
+			return(float)CompetitionScore.score(new BestFirstAgent(), 3134);
 			/*
 //		float min = 1e10f;
 		float sum = 0;

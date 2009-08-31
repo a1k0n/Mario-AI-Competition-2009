@@ -25,10 +25,9 @@ final class MarioMath {
 		}
 	}
 
+	// converges quadratically but not always numerically stable
 	static private float secantSolve(DistanceFunction f, float distance, float dx0, float min) {
-		float x0=1, x1=2, xdiff;
-		float sgn = 1;
-		if(distance < 0) { sgn = -1; distance = -distance; }
+		float x0=min, x1=min+30, xdiff;
 		do {
 			float fx0 = f.value(dx0, x0);
 			float fx1 = f.value(dx0, x1);
@@ -36,9 +35,22 @@ final class MarioMath {
 			x0 = x1;
 			x1 -= xdiff;
 			// if our iteration takes us negative, negate and hope it doesn't loop
-			if(x1 < min) x1 = 2*min-x1; // reflect about min
+			//if(x1 < min) x1 = 2*min-x1; // reflect about min
 		} while(Math.abs(xdiff) > 1e-4);
-		return x1*sgn;
+		return x1;
+	}
+
+	// converges logarithmically, always works
+	static private float bisect(DistanceFunction f, float distance, float dx0, float min, float max) {
+		while(max-min > 1e-3) {
+			float mid = (min+max)/2;
+			float x = f.value(dx0, mid);
+			if(x < distance)
+				min = mid;
+			else
+				max = mid;
+		}
+		return (min+max)/2;
 	}
 
 	///////////////////////////////////////////////////////////////
@@ -80,6 +92,7 @@ final class MarioMath {
 	}
 
 	// runDistance is terrible to invert, so use the secant method to solve it
+	// inlined
 	public static float stepsToRun(float distance, float v0) {
 		float x0=1, x1=2, xdiff;
 		float sgn = 1;
@@ -100,14 +113,11 @@ final class MarioMath {
 	// as, of course, is fallDistance
 	public static float stepsToFall(float height, float ya0) {
 		// this has too many numerical problems; let's just underestimate it
-		if(ya0 < 0) {
-			// if we're "falling upwards" then find where we're falling
-			// downwards at the same height
-			float apogee = (float) (Math.log(1-ya0/20)/Math.log(0.85));
-			return secantSolve(_fallDistance, height, ya0, 2*apogee);
+		if(height < 0) {
+			height = -height;
+			ya0 = -ya0;
 		}
-		else
-			return secantSolve(_fallDistance, height, ya0, 0);
+		return secantSolve(_fallDistance, height, ya0, 0);
 	}
 
 	// how long will it take us to stomp enemy e?
@@ -126,5 +136,19 @@ final class MarioMath {
 		return (float) Math.sqrt(dx*dx + dy*dy);
 	}
 
+	// can mario reach a ledge from his current jump trajectory
+	public static boolean canReachLedge(float x0, float xa, 
+			int apogeesteps, float apogeey, float x1, float y1) {
+		// how long will it take us to get from x0 to x1 at our current speed,
+		// regardless of the jump?
+		float nsteps = stepsToRun(x1-x0, xa);
+
+		// how far will we fall in that time?
+		float ya = 2.8045f; // after a full height jump, mario's ya will be 2.8045 at the apogee
+		float y = apogeey - fallDistance(ya, nsteps-apogeesteps);
+
+		// do we end up higher than the ledge at that point?  if so, we can make it.
+		return y <= y1;
+	}
 }
 

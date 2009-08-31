@@ -50,6 +50,12 @@ public class HeuristicSearchingAgent extends RegisterableAgent implements Agent
 		int MarioY = (int)s.y/16 - s.ws.MapY;
 		int goal = 21;
 		float fgoalX = (goal+s.ws.MapX)*16+8;
+		// we're there!
+		if(s.x > fgoalX) {
+			// linearly interpolate at the max run speed to estimate how much
+			// farther past the goal we went
+			return (fgoalX - s.x)/9.71f;
+		}
 		float xsteps = MarioMath.stepsToRun(fgoalX - s.x, s.xa);
 		if(MarioX < 0 || MarioX >= 22) // mario ran off the screen; we're done
 			return xsteps;

@@ -250,7 +250,6 @@ public abstract class HeuristicSearchingAgent extends RegisterableAgent implemen
 			resync(observation, !epsilon(mpos[0],pred_x), !epsilon(mpos[1],pred_y));
 			ms.ws.sync(ws, sensors.levelScene, ms, observation.getEnemiesFloatPos());
 			ws = ms.ws;
-			ms.hurt = false;
 		}
 		// resync these things all the time
 		ms.mayJump = observation.mayMarioJump();

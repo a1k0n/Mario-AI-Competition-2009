@@ -49,6 +49,12 @@ public abstract class HeuristicSearchingAgent extends RegisterableAgent implemen
 		int MarioY = (int)s.y/16 - s.ws.MapY;
 		int goal = 21;
 		float fgoalX = (goal+s.ws.MapX)*16+8;
+		// we're there!
+		if(s.x > fgoalX) {
+			// linearly interpolate at the max run speed to estimate how much
+			// farther past the goal we went
+			return (fgoalX - s.x)/9.71f;
+		}
 		float xsteps = MarioMath.stepsToRun(fgoalX - s.x, s.xa);
 		if(MarioX < 0 || MarioX >= 22) // mario ran off the screen; we're done
 			return xsteps + damage;
@@ -244,6 +250,7 @@ public abstract class HeuristicSearchingAgent extends RegisterableAgent implemen
 			resync(observation, !epsilon(mpos[0],pred_x), !epsilon(mpos[1],pred_y));
 			ms.ws.sync(ws, sensors.levelScene, ms, observation.getEnemiesFloatPos());
 			ws = ms.ws;
+			ms.hurt = false;
 		}
 		// resync these things all the time
 		ms.mayJump = observation.mayMarioJump();

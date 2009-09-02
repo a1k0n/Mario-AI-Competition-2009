@@ -255,6 +255,7 @@ public class HeuristicSearchingAgent extends RegisterableAgent implements Agent
 			}
 			ms.ws.sync(ws, sensors.levelScene, ms, observation.getEnemiesFloatPos());
 			ws = ms.ws;
+			ms.hurt = false;
 		}
 		// resync these things all the time
 		ms.mayJump = observation.mayMarioJump();

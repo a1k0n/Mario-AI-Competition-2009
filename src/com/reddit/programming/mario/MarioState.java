@@ -49,7 +49,7 @@ public final class MarioState extends SpriteState
 		n.facing = facing; n.jumpTime = jumpTime;
 		n.big = big; n.fire = fire;
 		n.dead = dead;
-		n.hurt = false;
+		n.hurt = hurt;
 		n.onGround = onGround;
 		n.wasOnGround = onGround;
 		n.mayJump = mayJump;
@@ -66,26 +66,12 @@ public final class MarioState extends SpriteState
 		n.action = action;
 		n.pred = this;
 
-		int jump_steps = action/ACT_JUMP;
-		if(jump_steps > 1) {
-			action = (action&7) + 8;
-			for(int i=0;i<jumpstep_table[jump_steps];i++) {
-				n.g = g + 1;
-				n.ws = ws;
-				n.move(action);
-				if(!hurt) {
-					n.ws = n.ws.step();
-					n.ws = n.ws.interact(n, false);
-				}
-			}
-		} else {
-			n.g = g + 1;
-			n.ws = ws;
-			n.move(action);
-			if(!hurt) {
-				n.ws = n.ws.step();
-				n.ws = n.ws.interact(n, false);
-			}
+		n.g = g + 1;
+		n.ws = ws;
+		n.move(action);
+		if(!hurt) {
+			n.ws = n.ws.step();
+			n.ws = n.ws.interact(n, false);
 		}
 
 		return n;

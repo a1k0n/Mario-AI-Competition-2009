@@ -65,15 +65,10 @@ public final class BestFirstAgent extends HeuristicSearchingAgent
 				ms.g = next.g + Tunables.GIncrement;
 				ms.cost = ms.g + h + ((a&MarioState.ACT_JUMP)>0?Tunables.FeetOnTheGroundBonus:0);
 				bestfound = marioMin(ms,bestfound);
+
 				if (h < 0.1f)
-				{
-					if (!goalFound)
-						Tunables.PathFound++;
-					goalFound = true;
-					if (h < threshold)
-						threshold = h;
-					continue;
-				}				
+					return ms.root_action;
+
 				if (ms.cost < threshold)
 					pq.offer(ms);
 				pq_siz++;

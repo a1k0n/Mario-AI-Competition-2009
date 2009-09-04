@@ -187,11 +187,6 @@ public abstract class HeuristicSearchingAgent implements Agent
 
 	protected abstract int searchForAction(MarioState initialState, WorldState ws);
 	
-	public static int costToTransparency(float cost) {
-		if (cost <= 0) return 80;
-		return Math.max(0, 40-(int)cost);
-	}
-
 	public static MarioState marioMin(MarioState a, MarioState b) {
 		if(a == null) return b;
 		if(b == null) return a;
@@ -232,9 +227,9 @@ public abstract class HeuristicSearchingAgent implements Agent
 						float diff = Math.abs(ms.x-mpos[0]) + Math.abs(ms.y-mpos[1]);
 						System.out.printf("mario state mismatch (%f,%f) -> (%f,%f); attempting resync\n",
 								ms.x,ms.y, mpos[0], mpos[1]);
-						if(!stdinSingleStep && diff > 0.01f) try {
-							System.in.read();
-						} catch(IOException e) {}
+						//if(!stdinSingleStep && diff > 0.01f) try {
+						//	System.in.read();
+						//} catch(IOException e) {}
 					}
 				}
 			}

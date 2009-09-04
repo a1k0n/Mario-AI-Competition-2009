@@ -102,7 +102,7 @@ public final class WorldState
 			int j;
 			for(j=21;j>=0;j--) // find the first block from the bottom
 				if(map[j][i] != 0) break;
-			if(j < 0) {
+			if(j < 0 || j+MapY < 8) { // this is probably a ceiling
 				heightmap[i] = 22;
 			} else {
 				for(;j>=0;j--)

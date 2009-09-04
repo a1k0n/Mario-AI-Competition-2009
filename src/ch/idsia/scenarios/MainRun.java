@@ -14,6 +14,7 @@ import ch.idsia.utils.StatisticalSummary;
 import java.util.List;
 
 import competition.cig.sergeykarakovskiy.SergeyKarakovskiy_JumpingAgent;
+import com.reddit.programming.mario.BestFirstAgent;
 
 /**
  * Created by IntelliJ IDEA.
@@ -73,7 +74,8 @@ public class MainRun
         //    AgentsPool.addAgent(new SlowAgent());
         //    AgentsPool.addAgent(new AStarAgent());
 //            AgentsPool.addAgent(new RjAgent());
-            AgentsPool.addAgent(new SergeyKarakovskiy_JumpingAgent());
+//            AgentsPool.addAgent(new SergeyKarakovskiy_JumpingAgent());
+            AgentsPool.addAgent(new BestFirstAgent());
         }
     }
 

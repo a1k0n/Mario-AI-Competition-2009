@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd classes
+java -Xmx1024M ch.idsia.scenarios.MainRun -vaot on -vlx 1044 -vis on -ls 3143
+

@@ -1,7 +1,6 @@
 package ch.idsia.ai.agents.ai;
 
 import ch.idsia.ai.agents.Agent;
-import ch.idsia.ai.agents.RegisterableAgent;
 import ch.idsia.ai.Evolvable;
 import ch.idsia.ai.MLP;
 import ch.idsia.mario.environments.Environment;
@@ -12,7 +11,7 @@ import ch.idsia.mario.environments.Environment;
  * Date: May 13, 2009
  * Time: 11:11:33 AM
  */
-public class MediumMLPAgent extends RegisterableAgent implements Agent, Evolvable {
+public class MediumMLPAgent extends BasicAIAgent implements Agent, Evolvable {
 
     private static final String name = "MediumMLPAgent";
     private MLP mlp;

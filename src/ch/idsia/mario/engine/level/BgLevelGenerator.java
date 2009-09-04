@@ -1,12 +1,11 @@
 package ch.idsia.mario.engine.level;
 
 import java.util.Random;
-import  ch.idsia.mario.engine.GlobalOptions;
 
 
 public class BgLevelGenerator
 {
-    private static Random levelSeedRandom = new Random(GlobalOptions.getSeed());
+    private static Random levelSeedRandom = new Random();
 
     public static Level createLevel(int width, int height, boolean distant, int type)
     {

@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.util.Comparator;
 
 import ch.idsia.ai.agents.Agent;
-import ch.idsia.ai.agents.RegisterableAgent;
-import ch.idsia.mario.engine.GlobalOptions;
 import ch.idsia.mario.engine.sprites.Mario;
 import ch.idsia.mario.environments.Environment;
 
-public abstract class HeuristicSearchingAgent extends RegisterableAgent implements Agent
+public abstract class HeuristicSearchingAgent implements Agent
 {
 	public static final Comparator<MarioState> msComparator = new MarioStateComparator();
 
@@ -27,11 +25,17 @@ public abstract class HeuristicSearchingAgent extends RegisterableAgent implemen
 	WorldState ws = null;
 	float pred_x, pred_y;
 	boolean won = false;
+    private String name;
 
 	public HeuristicSearchingAgent(String name) {
-		super(name);
+		setName(name);
 		reset();
 	}
+
+    public Agent.AGENT_TYPE getType() { return Agent.AGENT_TYPE.AI; }
+	public String getName() { return name; }
+	public void setName(String Name) { this.name = Name; }
+
 
 	@Override
 	public void reset() {
@@ -164,7 +168,7 @@ public abstract class HeuristicSearchingAgent extends RegisterableAgent implemen
 		// left and right at the same time: useless
 		if((a&MarioState.ACT_LEFT)>0 && (a&MarioState.ACT_RIGHT)>0) return true;
 		// jumping when the jump button doesn't do anything: useless
-		if((a/MarioState.ACT_JUMP)>0) {
+		if((a&MarioState.ACT_JUMP)>0) {
 			if(s.jumpTime == 0 && !s.mayJump) return true;
 			if(s.jumpTime <= 0 && !s.onGround && !s.sliding) return true;
 		}
@@ -179,19 +183,6 @@ public abstract class HeuristicSearchingAgent extends RegisterableAgent implemen
 				return true;
 		}
 		return false;
-	}
-
-	protected void addLine(float x0, float y0, float x1, float y1, int color) {
-		if(drawPath && GlobalOptions.MarioPosSize < 400) {
-			GlobalOptions.MarioPos[GlobalOptions.MarioPosSize][0] = (int)x0;
-			GlobalOptions.MarioPos[GlobalOptions.MarioPosSize][1] = (int)y0;
-			GlobalOptions.MarioPos[GlobalOptions.MarioPosSize][2] = color;
-			GlobalOptions.MarioPosSize++;
-			GlobalOptions.MarioPos[GlobalOptions.MarioPosSize][0] = (int)x1;
-			GlobalOptions.MarioPos[GlobalOptions.MarioPosSize][1] = (int)y1;
-			GlobalOptions.MarioPos[GlobalOptions.MarioPosSize][2] = color;
-			GlobalOptions.MarioPosSize++;
-		}
 	}
 
 	protected abstract int searchForAction(MarioState initialState, WorldState ws);
@@ -264,8 +255,6 @@ public abstract class HeuristicSearchingAgent extends RegisterableAgent implemen
 		}
 
 		int next_action = searchForAction(ms, ws);
-		if(next_action/MarioState.ACT_JUMP > 0)
-			next_action = (next_action&7) + 8;
 		ms_prev = ms;
 		ms = ms.next(next_action, ws);
 		pred_x = ms.x;

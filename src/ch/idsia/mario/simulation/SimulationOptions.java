@@ -14,16 +14,17 @@ import ch.idsia.utils.ParameterContainer;
 
 public class SimulationOptions extends ParameterContainer
 {
-//    protected Agent agent;
+    protected Agent agent;
 //    protected MarioComponent marioComponent = null;
 
-    public static int currentAttempt = -42;
+    public static int currentTrial = 1;
 
     protected SimulationOptions()
     {
         super();
-        currentAttempt = 1;
+//        resetCurrentTrial();
     }
+
 
     public SimulationOptions getSimulationOptionsCopy()
     {
@@ -37,20 +38,24 @@ public class SimulationOptions extends ParameterContainer
         ret.setVisualization(isVisualization());
         ret.setPauseWorld(isPauseWorld());
         ret.setPowerRestoration(isPowerRestoration());
-        ret.setMaxAttempts(getMaxAttempts());
+        ret.setNumberOfTrials(getNumberOfTrials());
         ret.setMarioMode(getMarioMode());
         ret.setTimeLimit(getTimeLimit());
         ret.setZLevelEnemies(getZLevelEnemies());
         ret.setZLevelMap(getZLevelMap());
+        ret.setMarioInvulnerable(isMarioInvulnerable());
+//        ret.setCurrentTrial(getCurrentTrial());
         return ret;
     }
 
     // Agent
     public Agent getAgent() {
-        return a(getParameterValue("-ag"));      }
+//        return a(getParameterValue("-ag"));      }
+        return agent; }
 
     public void setAgent(Agent agent) {
-        setParameterValue("-ag", s(agent));
+//        setParameterValue("-ag", s(agent));
+        this.agent = agent;
     }
 
     // TODO? LEVEL_TYPE enum?
@@ -111,12 +116,12 @@ public class SimulationOptions extends ParameterContainer
     public void setStopSimulationIfWin(boolean stopSimulationIfWin) {
         setParameterValue("-ssiw", s(stopSimulationIfWin));    }
 
-    //MaxAttempts
-    public int getMaxAttempts() {
-        return i(getParameterValue("-an"));     }
+    //Number Of Trials
+    public int getNumberOfTrials() {
+        return i(getParameterValue("-not"));     }
 
-    public void setMaxAttempts(int maxAttempts) {
-        setParameterValue("-an", s(maxAttempts));    }
+    public void setNumberOfTrials(int numberOfTrials) {
+        setParameterValue("-not", s(numberOfTrials));    }
 
     //MarioMode
     public int getMarioMode() {
@@ -156,4 +161,25 @@ public class SimulationOptions extends ParameterContainer
         setParameterValue("-tl", s(timeLimit));
     }
 
+    // Invulnerability
+    public boolean isMarioInvulnerable() {
+        return b(getParameterValue("-i"));  }
+
+    public void setMarioInvulnerable(boolean invulnerable)
+    {         setParameterValue("-i", s(invulnerable));    }
+
+    // Trial tracking
+
+    public void resetCurrentTrial()
+    {
+        currentTrial = 1;
+    }    
+//    public void setCurrentTrial(int curTrial) {
+//        setParameterValue("-not", s(curTrial));
+//    }
+//
+//    public int getCurrentTrial()
+//    {
+//        return i(getParameterValue("-not"));
+//    }
 }

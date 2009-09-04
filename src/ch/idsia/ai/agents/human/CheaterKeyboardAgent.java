@@ -109,7 +109,7 @@ public class CheaterKeyboardAgent extends KeyAdapter implements Agent {
                     GlobalOptions.AdjustMarioComponentFPS();
                 }
                 break;
-            case 56:
+            case 56:  // chr(56) = 8
                 if (isPressed)
                 {
                     int temp = prevFPS;

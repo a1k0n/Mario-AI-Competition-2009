@@ -3,14 +3,10 @@ package ch.idsia.mario.engine;
 import ch.idsia.tools.GameViewer;
 import ch.idsia.tools.LOGGER;
 
-import java.awt.Point;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.Vector;
-
-import com.reddit.programming.mario.DebugPolyLineList;
 
 public class GlobalOptions {
     public static boolean Labels = false;
@@ -30,21 +26,10 @@ public class GlobalOptions {
     //    public static Defaults defaults = new Defaults();
     public static boolean GameVeiwerContinuousUpdatesOn = false;
     public static boolean PowerRestoration;
-    
-    private static int seed = 0;
-    private static int difficulty = 0;
-    
-    public static DebugPolyLineList MarioLines = new DebugPolyLineList();
-    public static int[][] MarioPos = new int[400][3];
-	public static int MarioPosSize = 0;
 
     public static boolean StopSimulationIfWin;
-	public static boolean writeFrames = false;
-	public static String currentController = "";
-	public static boolean drawText = true;
-	public static boolean dontResetWindowPosition = false;
-	public static long totalFrames = 0;
-	
+    public static boolean isMarioInvulnerable;
+
     public static void registerMarioComponent(MarioComponent mc)
     {
         marioComponent = mc;
@@ -80,26 +65,6 @@ public class GlobalOptions {
         return dateFormat.format(date);
     }
 
-    public static void setSeed(int s)
-    {
-    	seed = s;
-    }
-    
-    public static void setDifficulty(int d)
-    {
-    	difficulty = d;
-    }
-
-    public static int getSeed()
-    {
-    	return seed;
-    }
-    
-    public static int getDifficulty()
-    {
-    	return difficulty;
-    }
-    
 //    public static class Defaults extends SimulationOptions
 //    {
 //        private static boolean gui;

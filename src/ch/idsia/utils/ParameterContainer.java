@@ -1,8 +1,7 @@
 package ch.idsia.utils;
 
 import ch.idsia.ai.agents.Agent;
-import ch.idsia.ai.agents.RegisterableAgent;
-import ch.idsia.ai.agents.human.HumanKeyboardAgent;
+import ch.idsia.ai.agents.AgentsPool;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +28,6 @@ public class ParameterContainer
             allowed = new String[]{
                     "-ag",
 //            "-agentName",
-                    "-an",
 //            "-attemptsNumber",
 //            "-e",
                     "-echo",
@@ -41,6 +39,7 @@ public class ParameterContainer
 //            "-gui",
                     "-gv",
                     "-gvc",
+                    "-i",
                     "-ld",
 //            "-levelDifficulty",
 //            "-levelLength",
@@ -52,6 +51,7 @@ public class ParameterContainer
                     "-m",
                     "-mm",
                     "-maxFPS",
+                    "-not",
 //            "-matLabFile",
 //            "-pauseWorld",
                     "-port",
@@ -148,15 +148,22 @@ public class ParameterContainer
     }
 
     public String s(Agent a)
-    {   
-        if (RegisterableAgent.getAgentByName(a.getName()) == null)
-            RegisterableAgent.registerAgent(a);
-        return a.getName();
+    {
+        try
+        {
+            if (AgentsPool.getAgentByName(a.getName()) == null)
+                AgentsPool.addAgent(a);
+            return a.getName();
+        }catch(NullPointerException e)
+        {
+            System.err.println("ERROR: Agent Not Found");
+            return "";
+        }
     }
 
     public Agent a(String s)
     {
-        return RegisterableAgent.getAgentByName(s);      
+        return AgentsPool.getAgentByName(s);
     }
 
     public boolean b(String s)
@@ -171,21 +178,22 @@ public class ParameterContainer
         else
         {
             defaultOptionsHashMap = new HashMap<String, String>();
-            new HumanKeyboardAgent();
+//            new HumanKeyboardAgent();
             defaultOptionsHashMap.put("-ag","HumanKeyboardAgent"); //defaultOptionsHashMap.put("-agentName","NoAgent");
-            defaultOptionsHashMap.put("-an","1"); //defaultOptionsHashMap.put("-attemptsNumber","5");
             defaultOptionsHashMap.put("-echo","off"); //defaultOptionsHashMap.put("-echo","off");
             defaultOptionsHashMap.put("-ewf","on"); //defaultOptionsHashMap.put("-exitWhenFinished","off");
             defaultOptionsHashMap.put("-fastTCP","off"); //
             defaultOptionsHashMap.put("-gv","off"); //defaultOptionsHashMap.put("-gameViewer","off");
             defaultOptionsHashMap.put("-gvc","off"); //defaultOptionsHashMap.put("-gameViewerContinuousUpdates","off");
+            defaultOptionsHashMap.put("-i","off"); // Invulnerability
             defaultOptionsHashMap.put("-ld","0"); //defaultOptionsHashMap.put("-levelDifficulty","0");
             defaultOptionsHashMap.put("-ll","320"); //defaultOptionsHashMap.put("-levelLength","320");
-            defaultOptionsHashMap.put("-ls","1"); //defaultOptionsHashMap.put("-levelRandSeed","1");
+            defaultOptionsHashMap.put("-ls","0"); //defaultOptionsHashMap.put("-levelRandSeed","1");
             defaultOptionsHashMap.put("-lt","0"); //defaultOptionsHashMap.put("-levelType","1");
             defaultOptionsHashMap.put("-maxFPS","off"); //defaultOptionsHashMap.put("-maxFPS","off");
             defaultOptionsHashMap.put("-m",""); //defaultOptionsHashMap.put("-matLabFile","DefaultMatlabFile");
             defaultOptionsHashMap.put("-mm","2");
+            defaultOptionsHashMap.put("-not","1"); //defaultOptionsHashMap.put("-attemptsNumber","5");
             defaultOptionsHashMap.put("-pw","off"); //defaultOptionsHashMap.put("-pauseWorld","off");
             defaultOptionsHashMap.put("-port","4242"); //defaultOptionsHashMap.put("-port","4242");
             defaultOptionsHashMap.put("-pr","off"); //defaultOptionsHashMap.put("-powerRestoration","off");

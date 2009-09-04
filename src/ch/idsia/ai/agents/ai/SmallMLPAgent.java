@@ -3,7 +3,6 @@ package ch.idsia.ai.agents.ai;
 import ch.idsia.ai.Evolvable;
 import ch.idsia.ai.MLP;
 import ch.idsia.ai.agents.Agent;
-import ch.idsia.ai.agents.RegisterableAgent;
 import ch.idsia.mario.environments.Environment;
 
 /**
@@ -12,7 +11,7 @@ import ch.idsia.mario.environments.Environment;
  * Date: Apr 28, 2009
  * Time: 2:09:42 PM
  */
-public class SmallMLPAgent extends RegisterableAgent implements Agent, Evolvable {
+public class SmallMLPAgent extends BasicAIAgent implements Agent, Evolvable {
 
     private MLP mlp;
     final int numberOfOutputs = 6;

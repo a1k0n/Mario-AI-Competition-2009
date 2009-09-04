@@ -39,36 +39,6 @@ public class Enemy extends Sprite
     private int wingTime = 0;
     
     public boolean noFireballDeath;
-    
-    private String name()
-    {
-    	String result = "dunno";
-    	switch (type)
-    	{
-		    case ENEMY_RED_KOOPA:
-		    	result = "redkoopa";
-		    	break;
-			case ENEMY_GREEN_KOOPA:
-		    	result = "greenkoopa";
-		    	break;
-			case ENEMY_GOOMBA:
-		    	result = "goomba";
-		    	break;
-			case ENEMY_SPIKY:
-	    		result = "spiky";
-		    	break;
-		    case ENEMY_FLOWER:
-		    	result = "flower";
-		    	break;
-    	}
-		if (winged)
-			result+="(winged)";
-		if (onGround)
-			result+="(onGround)";
-		else
-			result+="(flying)";
-		return result;
-    }
 
     public Enemy(LevelScene world, int x, int y, int dir, int type, boolean winged, int mapX, int mapY)
     {
@@ -153,11 +123,13 @@ public class Enemy extends Sprite
                         {
                             spriteContext.addSprite(new Shell(world, x, y, 1));
                         }
+//                        System.out.println("collideCheck and stomp");
+                        ++LevelScene.killedCreaturesTotal;
+                        ++LevelScene.killedCreaturesByStomp;
                     }
                 }
                 else
                 {
-//                	System.out.println("auch :"+name());
                     world.mario.getHurt();
                 }
             }
@@ -374,6 +346,9 @@ public class Enemy extends Sprite
                 winged = false;
                 hPic = -hPic;
                 yPicO = -yPicO + 16;
+//                System.out.println("shellCollideCheck");
+                ++LevelScene.killedCreaturesTotal;
+                ++LevelScene.killedCreaturesByShell;
                 return true;
             }
         }
@@ -401,6 +376,9 @@ public class Enemy extends Sprite
                 winged = false;
                 hPic = -hPic;
                 yPicO = -yPicO + 16;
+//                System.out.println("fireballCollideCheck");
+                ++LevelScene.killedCreaturesTotal;
+                ++LevelScene.killedCreaturesByFireBall;
                 return true;
             }
         }
@@ -421,6 +399,7 @@ public class Enemy extends Sprite
             winged = false;
             hPic = -hPic;
             yPicO = -yPicO + 16;
+            System.out.println("bumpCheck");
         }
     }
 

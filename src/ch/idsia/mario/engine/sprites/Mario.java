@@ -18,12 +18,18 @@ public class Mario extends Sprite
 //    public static String levelString = "none";
     private int status = STATUS_RUNNING;
     private final int FractionalPowerUpTime = 0;
+    public static int gainedMushrooms;
+    public static int gainedFlowers;
+    public static boolean isMarioInvulnerable;
 
     public static void resetStatic(int marioMode)
     {
         large = marioMode > 0;
         fire = marioMode == 2;
         coins = 0;
+        gainedMushrooms = 0;
+        gainedFlowers = 0;
+
 //        lives = 65536;
 //        levelString = "none";
 //        numberOfAttempts = 0;
@@ -343,11 +349,8 @@ public class Mario extends Sprite
         }
 
         onGround = false;
-    //System.out.println("mariosprite: (xa,ya)1 = " + xa + "," + ya);
         move(xa, 0);
-    //System.out.println("mariosprite: (x,y,xa,ya)2 = " + x + "," + y + "," + xa + "," + ya);
         move(0, ya);
-    //System.out.println("mariosprite: (x,y,xa,ya)3 = " + x + "," + y + "," + xa + "," + ya);
 
         if (y > world.level.height * 16 + 16)
         {
@@ -371,7 +374,6 @@ public class Mario extends Sprite
             x = world.level.width * 16;
             xa = 0;
         }
-    //System.out.println("mariostate: (x,y,xa,ya)4 = " + x + "," + y + "," + xa + "," + ya);
 
         ya *= 0.85f;
         if (onGround)
@@ -398,7 +400,6 @@ public class Mario extends Sprite
                 carried = null;
             }
         }
-    //System.out.println("mariostate: (xa,ya)5 = " + xa + "," + ya);
     }
 
     private void calcPic()
@@ -617,7 +618,8 @@ public class Mario extends Sprite
 
     public void getHurt()
     {
-        if (deathTime > 0 || world.paused) return;
+        if (deathTime > 0 || world.paused || isMarioInvulnerable) return;
+
         if (invulnerableTime > 0) return;
 
         if (large)
@@ -673,6 +675,7 @@ public class Mario extends Sprite
         {
             Mario.getCoin();
         }
+        ++gainedFlowers;
     }
 
     public void getMushroom()
@@ -689,6 +692,7 @@ public class Mario extends Sprite
         {
             Mario.getCoin();
         }
+        ++gainedMushrooms;        
     }
 
     public void kick(Shell shell)

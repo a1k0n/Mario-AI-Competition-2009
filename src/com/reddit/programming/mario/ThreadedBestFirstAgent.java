@@ -128,9 +128,6 @@ public class ThreadedBestFirstAgent extends HeuristicSearchingAgent implements A
 				// if the node got marked dead
 				if(next.cost == Float.POSITIVE_INFINITY) continue;
 
-				if(ThreadedBestFirstAgent.drawPath)
-					addToDrawPath(next.pred);
-
 				bestfound = ThreadedBestFirstAgent.marioMin(next,bestfound);
 				for(int a=0;a<16;a++) {
 					if(HeuristicSearchingAgent.useless_action(a, next))
@@ -150,7 +147,7 @@ public class ThreadedBestFirstAgent extends HeuristicSearchingAgent implements A
 
 					float h = cost(ms, initialState);
 					ms.g = next.g + Tunables.GIncrement;
-					ms.cost = ms.g + h + ((a/MarioState.ACT_JUMP)>0?Tunables.FeetOnTheGroundBonus:0);
+					ms.cost = ms.g + h + ((a&MarioState.ACT_JUMP)>0?Tunables.FeetOnTheGroundBonus:0);
 					n++;
 					if(h <= 0) {
 						if(ThreadedBestFirstAgent.verbose1) {
@@ -173,12 +170,6 @@ public class ThreadedBestFirstAgent extends HeuristicSearchingAgent implements A
 			}
 		}
 
-		private void addToDrawPath(MarioState mario) {
-			GlobalOptions.MarioPos[DrawIndex] = new int[]{(int)mario.x, (int)mario.y, ThreadedBestFirstAgent.costToTransparency(mario.cost)};
-			DrawIndex += ThreadedBestFirstAgent.simultaneousSearchers;
-			if (DrawIndex >= 400)
-				DrawIndex = id;
-		}
 	}
 
 }

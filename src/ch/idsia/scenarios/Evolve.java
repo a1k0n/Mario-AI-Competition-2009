@@ -1,19 +1,18 @@
 package ch.idsia.scenarios;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import wox.serial.Easy;
 import ch.idsia.ai.Evolvable;
 import ch.idsia.ai.agents.Agent;
-import ch.idsia.ai.agents.RegisterableAgent;
 import ch.idsia.ai.agents.ai.SimpleMLPAgent;
 import ch.idsia.ai.ea.ES;
 import ch.idsia.ai.tasks.ProgressTask;
 import ch.idsia.ai.tasks.Task;
 import ch.idsia.tools.CmdLineOptions;
 import ch.idsia.tools.EvaluationOptions;
+import wox.serial.Easy;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -29,7 +28,7 @@ public class Evolve {
 
     public static void main(String[] args) {
         EvaluationOptions options = new CmdLineOptions(args);
-        options.setMaxAttempts(1);
+        options.setNumberOfTrials(1);
         options.setPauseWorld(true);
         List<Agent> bestAgents = new ArrayList<Agent>();
         DecimalFormat df = new DecimalFormat("0000");
@@ -56,7 +55,7 @@ public class Evolve {
                 options.setMaxFPS(true);
                 Agent a = (Agent) es.getBests()[0];
                 a.setName(((Agent)initial).getName() + df.format(gen));
-                RegisterableAgent.registerAgent(a);
+//                AgentsPool.setCurrentAgent(a);
                 bestAgents.add(a);
                 double result = task.evaluate(a)[0];
 //                LOGGER.println("trying: " + result, LOGGER.VERBOSE_MODE.INFO);

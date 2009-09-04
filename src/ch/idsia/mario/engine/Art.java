@@ -8,7 +8,11 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
+import java.util.Iterator;
+
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 
 
 public class Art
@@ -34,6 +38,8 @@ public class Art
     {
         try
         {
+//            System.out.println("Image Directory: " + img);
+//            System.out.println(curDir);
             mario = cutImage(gc, "mariosheet.png", 32, 32);
             smallMario = cutImage(gc, "smallmariosheet.png", 16, 16);
             fireMario = cutImage(gc, "firemariosheet.png", 32, 32);
@@ -51,31 +57,44 @@ public class Art
         }
         catch (Exception e)
         {
-        	RuntimeException rte = new RuntimeException();
-        	rte.setStackTrace(e.getStackTrace());
-            throw rte;
+            e.printStackTrace();
         }
 
     }
 
     private static Image getImage(GraphicsConfiguration gc, String imageName) throws IOException
     {
-//        System.out.println("trying to get " + imageName);
-        String[] filenames = new String[]{imageName, curDir + "/img/" + imageName, curDir + "/../img/" + imageName};
+        // System.out.println("trying to get " + imageName);
         BufferedImage source = null;
-        for (String filename : filenames) {
-        	File testFile = new File(filename);
-        	if (testFile.exists()){
-        		source = ImageIO.read(testFile);
-        		continue;
-        	}
+        try {
+            source = ImageIO.read(Art.class.getResourceAsStream(imageName));
+            // System.out.println("source: " + source);
         }
-        if (source == null)
-        	try {
-        		source = ImageIO.read(Art.class.getResourceAsStream(imageName));
-        	}
-        	catch(IOException e) {throw new IOException("can't find file" + imageName);}
-        
+        catch (Exception e) {
+            e.printStackTrace ();
+        }
+
+        if (source == null) {
+            // System.out.println("Could not read image through getResourceAsStream");
+            imageName = img + imageName;
+            File file = new File(imageName);
+            // System.out.println("File: " + file + ", exists " + file.exists() + ", length " + file.length ());
+            source = ImageIO.read(file);
+            // System.out.println("source: " + source);
+        }
+        if (source == null) { // still!!
+            // System.out.println("Could not read image through ImageIO either!");
+            File file = new File(imageName);
+            ImageInputStream iis = ImageIO.createImageInputStream(file);
+            String suffix = imageName.substring(imageName.length() - 3, imageName.length());
+            // System.out.println("suffix: " + suffix);
+            ImageReader reader = ImageIO.getImageReadersBySuffix(suffix).next ();
+            // System.out.println("Let's try this reader: " + reader);
+            reader.setInput(iis, true);
+            source = reader.read (0);
+            // System.out.println("source: " + source);
+        }
+        //System.out.println("gc: " + gc);
         Image image = gc.createCompatibleImage(source.getWidth(), source.getHeight(), Transparency.BITMASK);
         Graphics2D g = (Graphics2D) image.getGraphics();
         g.setComposite(AlphaComposite.Src);

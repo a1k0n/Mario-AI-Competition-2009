@@ -36,7 +36,7 @@ public class EvaluateJLink {
         EvaluationOptions options = new CmdLineOptions(new String[0]);
         final int startingSeed = 0;
         options.setLevelRandSeed(seed);
-        options.setMaxAttempts(1);
+        options.setNumberOfTrials(1);
         options.setVisualization(false);
         options.setMaxFPS(true);
         options.setLevelDifficulty(level);

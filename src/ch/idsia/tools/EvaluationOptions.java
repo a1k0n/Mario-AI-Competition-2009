@@ -2,7 +2,6 @@ package ch.idsia.tools;
 
 import ch.idsia.mario.engine.GlobalOptions;
 import ch.idsia.mario.simulation.SimulationOptions;
-import ch.idsia.tools.tcp.ServerAgent;
 
 import java.awt.*;
 
@@ -36,8 +35,8 @@ public class EvaluationOptions extends SimulationOptions
         GlobalOptions.PowerRestoration = isPowerRestoration();
         GlobalOptions.StopSimulationIfWin = isStopSimulationIfWin();
         GlobalOptions.TimerOn = isTimer();
-    }    
-
+    }
+    
     public Boolean isExitProgramWhenFinished()    {
         return b(getParameterValue("-ewf"));    }
 
@@ -52,8 +51,6 @@ public class EvaluationOptions extends SimulationOptions
 
     public Point getViewLocation()
     {
-    	if (GlobalOptions.dontResetWindowPosition)
-    		return null;
         int x = i(getParameterValue("-vlx"));
         int y = i(getParameterValue("-vly"));
         return new Point(x, y);
@@ -74,7 +71,7 @@ public class EvaluationOptions extends SimulationOptions
         return getParameterValue("-ag");      }
 
     public Integer getServerAgentPort() {
-        setMaxAttempts(-1);
+        setNumberOfTrials(-1);
         String value = optionsHashMap.get("-port");
         if (value == null)
         {

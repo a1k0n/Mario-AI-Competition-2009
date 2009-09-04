@@ -13,7 +13,12 @@ import ch.idsia.mario.environments.Environment;
 public class BasicAIAgent implements Agent
 {
     protected boolean action[] = new boolean[Environment.numberOfButtons];
-    protected String name = "Instance of BasicAIAgent. Change this name";
+    protected String name = "Instance_of_BasicAIAgent._Change_this_name";
+
+    public BasicAIAgent(String s)
+    {
+        setName(s);
+    }
 
     public void reset()
     {

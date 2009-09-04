@@ -2,9 +2,8 @@ package com.reddit.programming.mario;
 
 import java.awt.Color;
 import ch.idsia.ai.agents.Agent;
-import ch.idsia.mario.engine.GlobalOptions;
 
-public final class BestFirstAgent extends HeuristicSearchingAgent implements Agent
+public final class BestFirstAgent extends HeuristicSearchingAgent
 {
 	private PrioQ pq;
 	private static final int maxSteps = 1000;
@@ -21,9 +20,7 @@ public final class BestFirstAgent extends HeuristicSearchingAgent implements Age
 
 	@Override
 	protected int searchForAction(MarioState initialState, WorldState ws) {
-		DebugPolyLine line1;
 		pq.clear();
-		GlobalOptions.MarioPosSize = 0;
 
 		initialState.ws = ws;
 		initialState.g = 0;
@@ -56,16 +53,6 @@ public final class BestFirstAgent extends HeuristicSearchingAgent implements Age
 		for(n=0;n<maxSteps && !pq.isEmpty();n++) {
 			MarioState next = pq.poll();
 
-			if (drawPath) {
-				line1 = new DebugPolyLine(Color.BLUE);
-				int color = (int) Math.min(255, 10000*Math.abs(next.cost - next.pred.cost));
-				color = color|(color<<8)|(color<<16);
-				addLine(next.x, next.y, next.pred.x, next.pred.y, color);
-				line1.AddPoint(next.x, next.y);
-				line1.AddPoint(next.pred.x, next.pred.y);
-				line1.color = new Color(color);
-			}
-			//System.out.printf("a*: trying "); next.print();
 			for(a=0;a<16;a++) {
 				if(useless_action(a, next))
 					continue;
@@ -76,7 +63,7 @@ public final class BestFirstAgent extends HeuristicSearchingAgent implements Age
 
 				float h = cost(ms, initialState);
 				ms.g = next.g + Tunables.GIncrement;
-				ms.cost = ms.g + h + ((a/MarioState.ACT_JUMP)>0?Tunables.FeetOnTheGroundBonus:0);
+				ms.cost = ms.g + h + ((a&MarioState.ACT_JUMP)>0?Tunables.FeetOnTheGroundBonus:0);
 				bestfound = marioMin(ms,bestfound);
 				if (h < 0.1f)
 				{
@@ -91,8 +78,6 @@ public final class BestFirstAgent extends HeuristicSearchingAgent implements Age
 					pq.offer(ms);
 				pq_siz++;
 			}
-			if (drawPath)
-				GlobalOptions.MarioLines.Push(line1);
 		}
 
 		if (!pq.isEmpty())

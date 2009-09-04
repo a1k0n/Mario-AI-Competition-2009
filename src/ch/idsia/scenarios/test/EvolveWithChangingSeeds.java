@@ -6,8 +6,8 @@ import ch.idsia.ai.Evolvable;
 import ch.idsia.ai.ea.ES;
 import ch.idsia.ai.tasks.MultiDifficultyProgressTask;
 import ch.idsia.ai.agents.ai.SmallMLPAgent;
-import ch.idsia.ai.agents.RegisterableAgent;
 import ch.idsia.ai.agents.Agent;
+import ch.idsia.ai.agents.AgentsPool;
 import ch.idsia.scenarios.Stats;
 import wox.serial.Easy;
 
@@ -24,10 +24,10 @@ public class EvolveWithChangingSeeds {
 
     public static void main(String[] args) {
         EvaluationOptions options = new CmdLineOptions(new String[0]);
-        options.setMaxAttempts(1);
+        options.setNumberOfTrials(1);
         options.setPauseWorld(false);
         Evolvable initial = new SmallMLPAgent();
-        RegisterableAgent.registerAgent ((Agent) initial);
+        AgentsPool.addAgent((Agent) initial);
         options.setMaxFPS(true);
         options.setVisualization(false);
         MultiDifficultyProgressTask task = new MultiDifficultyProgressTask(options);

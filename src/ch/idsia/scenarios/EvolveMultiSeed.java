@@ -5,9 +5,9 @@ import ch.idsia.tools.CmdLineOptions;
 import ch.idsia.ai.Evolvable;
 import ch.idsia.ai.ea.ES;
 import ch.idsia.ai.tasks.MultiSeedProgressTask;
-import ch.idsia.ai.agents.ai.LargeMLPAgent;
-import ch.idsia.ai.agents.RegisterableAgent;
+import ch.idsia.ai.agents.ai.SimpleMLPAgent;
 import ch.idsia.ai.agents.Agent;
+import ch.idsia.ai.agents.AgentsPool;
 import wox.serial.Easy;
 
 /**
@@ -23,14 +23,14 @@ public class EvolveMultiSeed {
 
     public static void main(String[] args) {
         EvaluationOptions options = new CmdLineOptions(new String[0]);
-        options.setMaxAttempts(1);
+        options.setNumberOfTrials(1);
         options.setPauseWorld(true);
-        Evolvable initial = new LargeMLPAgent();
+        Evolvable initial = new SimpleMLPAgent();
         if (args.length > 0) {
-            initial = (Evolvable) RegisterableAgent.load (args[0]);
-            //RegisterableAgent.registerAgent ((Agent) initial);
+            initial = (Evolvable) AgentsPool.load (args[0]);
         }
-        RegisterableAgent.registerAgent ((Agent) initial);
+//        AgentsPool.registerAgent ((Agent) initial);
+//        AgentsPool.setCurrentAgent((Agent) initial);
         options.setMaxFPS(true);
             options.setVisualization(false);
             //Task task = new ProgressTask(options);
@@ -48,7 +48,8 @@ public class EvolveMultiSeed {
                 options.setMaxFPS(true);
                 Agent a = (Agent) es.getBests()[0];
                 a.setName(((Agent)initial).getName() + gen);
-                RegisterableAgent.registerAgent(a);
+//                RegisterableAgent.registerAgent(a);
+//                AgentsPool.setCurrentAgent(a);
                 double result = task.evaluate(a)[0];
                 options.setVisualization(false);
                 options.setMaxFPS(true);
@@ -58,5 +59,4 @@ public class EvolveMultiSeed {
                 }
             }
     }
-
 }

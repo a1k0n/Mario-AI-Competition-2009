@@ -62,7 +62,6 @@ public class BulletBill extends Sprite
                 }
                 else
                 {
-//                	System.out.println("Auch bullet");
                     world.mario.getHurt();
                 }
             }

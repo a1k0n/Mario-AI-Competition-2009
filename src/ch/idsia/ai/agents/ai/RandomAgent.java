@@ -1,7 +1,6 @@
 package ch.idsia.ai.agents.ai;
 
 import ch.idsia.ai.agents.Agent;
-import ch.idsia.ai.agents.RegisterableAgent;
 import ch.idsia.mario.environments.Environment;
 
 import java.util.Random;
@@ -13,7 +12,7 @@ import java.util.Random;
  * Time: 10:37:18 PM
  * Package: ch.idsia.ai.agents.ai;
  */
-public class RandomAgent extends RegisterableAgent implements Agent
+public class RandomAgent extends BasicAIAgent implements Agent
 {
     public RandomAgent()
     {

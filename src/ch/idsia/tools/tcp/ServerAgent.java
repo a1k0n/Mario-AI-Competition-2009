@@ -1,7 +1,7 @@
 package ch.idsia.tools.tcp;
 
 import ch.idsia.ai.agents.Agent;
-import ch.idsia.ai.agents.RegisterableAgent;
+import ch.idsia.ai.agents.ai.BasicAIAgent;
 import ch.idsia.mario.environments.Environment;
 import ch.idsia.tools.EvaluationInfo;
 
@@ -15,7 +15,7 @@ import java.io.IOException;
  * Package: ch.idsia.tools.Network
  */
 
-public class ServerAgent extends RegisterableAgent implements Agent
+public class ServerAgent extends BasicAIAgent implements Agent
 {
     Server server = null;
     private int port;

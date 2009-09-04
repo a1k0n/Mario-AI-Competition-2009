@@ -1,7 +1,6 @@
 package ch.idsia.ai.agents.ai;
 
 import ch.idsia.ai.agents.Agent;
-import ch.idsia.ai.agents.RegisterableAgent;
 import ch.idsia.mario.engine.sprites.Mario;
 import ch.idsia.mario.environments.Environment;
 
@@ -13,7 +12,7 @@ import ch.idsia.mario.environments.Environment;
  * Package: ch.idsia.ai.agents
  */
 
-public class ScaredSpeedyAgent extends RegisterableAgent implements Agent {
+public class ScaredSpeedyAgent extends BasicAIAgent implements Agent {
     public ScaredSpeedyAgent() {
         super("ScaredSpeedyAgent");
     }

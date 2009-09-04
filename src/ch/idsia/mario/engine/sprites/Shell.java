@@ -99,7 +99,6 @@ public class Shell extends Sprite
                 {
                     if (facing != 0)
                     {
-//                    	System.out.println("Auch shell");
                         world.mario.getHurt();
                     }
                     else

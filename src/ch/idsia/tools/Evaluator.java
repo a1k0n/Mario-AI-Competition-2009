@@ -113,11 +113,11 @@ public class Evaluator implements Runnable
         String startMessage = "Evaluation started at " + GlobalOptions.getDateTime(null);
         LOGGER.println(startMessage, LOGGER.VERBOSE_MODE.ALL);
 
-        boolean continueCondition;
-        int i = 0;
-        do
-        {
-            LOGGER.println("Attempts left: " + (evaluationOptions.getMaxAttempts() - ++i ), LOGGER.VERBOSE_MODE.ALL);
+//        boolean continueCondition;
+//        int i = 0;
+//        do
+//        {
+//            LOGGER.println("Attempts left: " + (evaluationOptions.getNumberOfTrials() - ++i ), LOGGER.VERBOSE_MODE.ALL);
             evaluationInfo = simulator.simulateOneLevel();
                                                         
             evaluationInfo.levelType = evaluationOptions.getLevelType();
@@ -126,9 +126,9 @@ public class Evaluator implements Runnable
             evaluationSummary.add(evaluationInfo);
             LOGGER.VERBOSE_MODE VM = (evaluationInfo.marioStatus == Mario.STATUS_WIN) ? LOGGER.VERBOSE_MODE.INFO : LOGGER.VERBOSE_MODE.ALL;
             LOGGER.println("run  finished with result : " + evaluationInfo, VM);
-            continueCondition = !GlobalOptions.StopSimulationIfWin || !(evaluationInfo.marioStatus == Mario.STATUS_WIN);
-        }
-        while ((evaluationOptions.getMaxAttempts() > i || evaluationOptions.getMaxAttempts() == -1 ) && continueCondition);
+//            continueCondition = !GlobalOptions.StopSimulationIfWin || !(evaluationInfo.marioStatus == Mario.STATUS_WIN);
+//        }
+//        while ((evaluationOptions.getNumberOfTrials() > i || evaluationOptions.getNumberOfTrials() == -1 ) && continueCondition);
 
         String fileName = "";
         if (!this.evaluationOptions.getMatlabFileName().equals(""))
@@ -142,9 +142,9 @@ public class Evaluator implements Runnable
 //        }
         long currentTime = System.currentTimeMillis();
         long elapsed = currentTime - startTime;
-         LOGGER.println(startMessage, LOGGER.VERBOSE_MODE.ALL);
-         LOGGER.println("Evaluation Finished at " + GlobalOptions.getDateTime(null), LOGGER.VERBOSE_MODE.ALL);
-         LOGGER.println("Total Evaluation Duration (HH:mm:ss:ms) " + GlobalOptions.getDateTime(elapsed), LOGGER.VERBOSE_MODE.ALL);
+        LOGGER.println(startMessage, LOGGER.VERBOSE_MODE.ALL);
+        LOGGER.println("Evaluation Finished at " + GlobalOptions.getDateTime(null), LOGGER.VERBOSE_MODE.ALL);
+        LOGGER.println("Total Evaluation Duration (HH:mm:ss:ms) " + GlobalOptions.getDateTime(elapsed), LOGGER.VERBOSE_MODE.ALL);
         if (!fileName.equals(""))
             LOGGER.println("Exported to " + fileName, LOGGER.VERBOSE_MODE.ALL);
         return evaluationSummary;

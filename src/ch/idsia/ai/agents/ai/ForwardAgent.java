@@ -1,7 +1,6 @@
 package ch.idsia.ai.agents.ai;
 
 import ch.idsia.ai.agents.Agent;
-import ch.idsia.ai.agents.RegisterableAgent;
 import ch.idsia.mario.engine.sprites.Mario;
 import ch.idsia.mario.environments.Environment;
 import ch.idsia.utils.MathX;
@@ -13,7 +12,7 @@ import ch.idsia.utils.MathX;
  * Time: 4:03:46 AM
  * Package: ch.idsia.ai.agents.ai;
  */
-public class ForwardAgent extends RegisterableAgent implements Agent
+public class ForwardAgent extends BasicAIAgent implements Agent
 {
     int trueJumpCounter = 0;
     int trueSpeedCounter = 0;
@@ -48,14 +47,6 @@ public class ForwardAgent extends RegisterableAgent implements Agent
         }
         return false;
     }
-
-//    private void show(char el) {
-//        System.out.print("block (" + Integer.valueOf(el) + ") :");
-//        for (int i = 0;i < 8; ++i)
-//            System.out.print((el & MathX.powsof2[i] ) + " ");
-//        System.out.println("");
-//    }
-    
 
     private byte[][] decode(String estate)
     {
@@ -121,8 +112,8 @@ public class ForwardAgent extends RegisterableAgent implements Agent
         byte[][] levelScene = observation.getCompleteObservation(/*1, 0*/);
         float[] marioPos = observation.getMarioFloatPos();
         float[] enemiesPos = observation.getEnemiesFloatPos();
-        String encodedState = observation.getBitmapLevelObservation();
-        byte[][] levelSceneFromBitmap = decode(encodedState);
+//        String encodedState = observation.getBitmapLevelObservation();
+//        byte[][] levelSceneFromBitmap = decode(encodedState);
 //        encodedState = observation.getBitmapEnemiesObservation();
 //        byte[][] enemiesFromBitmap = decode(encodedState);
 
@@ -168,31 +159,7 @@ public class ForwardAgent extends RegisterableAgent implements Agent
 //        }
 
         
-        if (levelSceneFromBitmap[11][13] != 0 || levelSceneFromBitmap[11][12] != 0 ||  DangerOfGap(levelSceneFromBitmap))
-        {
-            if (observation.mayMarioJump() || ( !observation.isMarioOnGround() && action[Mario.KEY_JUMP]))
-            {
-                action[Mario.KEY_JUMP] = true;
-            }
-            ++trueJumpCounter;
-        }
-        else
-        {
-            action[Mario.KEY_JUMP] = false;
-            trueJumpCounter = 0;
-        }
-
-        if (trueJumpCounter > 16)
-        {
-            trueJumpCounter = 0;
-            action[Mario.KEY_JUMP] = false;
-        }
-
-        action[Mario.KEY_SPEED] = DangerOfGap(levelSceneFromBitmap);
-        return action;
-
-
-//        if (levelScene[11][13] != 0 || levelScene[11][12] != 0 ||  DangerOfGap(levelScene))
+//        if (levelSceneFromBitmap[11][13] != 0 || levelSceneFromBitmap[11][12] != 0 ||  DangerOfGap(levelSceneFromBitmap))
 //        {
 //            if (observation.mayMarioJump() || ( !observation.isMarioOnGround() && action[Mario.KEY_JUMP]))
 //            {
@@ -212,7 +179,31 @@ public class ForwardAgent extends RegisterableAgent implements Agent
 //            action[Mario.KEY_JUMP] = false;
 //        }
 //
-//        action[Mario.KEY_SPEED] = DangerOfGap(levelScene);
+//        action[Mario.KEY_SPEED] = DangerOfGap(levelSceneFromBitmap);
 //        return action;
+//
+//
+        if (levelScene[11][13] != 0 || levelScene[11][12] != 0 ||  DangerOfGap(levelScene))
+        {
+            if (observation.mayMarioJump() || ( !observation.isMarioOnGround() && action[Mario.KEY_JUMP]))
+            {
+                action[Mario.KEY_JUMP] = true;
+            }
+            ++trueJumpCounter;
+        }
+        else
+        {
+            action[Mario.KEY_JUMP] = false;
+            trueJumpCounter = 0;
+        }
+
+        if (trueJumpCounter > 16)
+        {
+            trueJumpCounter = 0;
+            action[Mario.KEY_JUMP] = false;
+        }
+
+        action[Mario.KEY_SPEED] = DangerOfGap(levelScene);
+        return action;
     }
 }

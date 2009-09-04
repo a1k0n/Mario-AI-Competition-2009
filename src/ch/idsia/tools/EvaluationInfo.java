@@ -32,23 +32,29 @@ public class EvaluationInfo
     // if fire
     public String Memo = "";
     public int timeLeft = MagicNumberUndef;
-    public String agentName = "undefined";
-    public String agentType = "undefined";
+    public String agentName = "undefinedAgentName";
+    public String agentType = "undefinedAgentType";
     public int levelDifficulty = MagicNumberUndef;
     public int levelRandSeed = MagicNumberUndef;
     public int marioMode = MagicNumberUndef;
+    public int killsTotal = MagicNumberUndef;
 
     public double computeBasicFitness()
     {
         // neglect totalActionsPerfomed;
         // neglect totalLengthOfLevelCells;
         // neglect totalNumberOfCoins;
-        return lengthOfLevelPassedPhys - timeSpentOnLevel + numberOfGainedCoins + marioMode * 200 + marioStatus * 1000;
+        return lengthOfLevelPassedPhys - timeSpentOnLevel + numberOfGainedCoins + marioStatus*5000;
     }
 
     public double computeDistancePassed()
     {
         return lengthOfLevelPassedPhys;
+    }
+
+    public int computeKillsTotal()
+    {
+        return this.killsTotal;
     }
 
     //TODO: possible fitnesses adjustments: penalize for collisions with creatures and especially for  suicide. It's a sin.

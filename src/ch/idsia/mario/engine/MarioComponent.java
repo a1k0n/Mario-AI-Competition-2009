@@ -33,7 +33,7 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
     Thread animator;
 
     private int ZLevelEnemies = 1;
-    private int ZLevelMap = 1;
+    private int ZLevelScene = 1;
 
     public void setGameViewer(GameViewer gameViewer) {
         this.gameViewer = gameViewer;
@@ -108,14 +108,12 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
 
     }
 
-    // write frames to disk
-    public VolatileImage image = null;
-    public EvaluationInfo run1(int currentAttempt, int totalNumberOfAttempts) {
+    public EvaluationInfo run1(int currentTrial, int totalNumberOfTrials) {
         running = true;
         adjustFPS();
         EvaluationInfo evaluationInfo = new EvaluationInfo();
 
-        image = null;
+        VolatileImage image = null;
         Graphics g = null;
         Graphics og = null;
 
@@ -144,7 +142,6 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
         while (/*Thread.currentThread() == animator*/ running) {
             // Display the next frame of animation.
 //                repaint();
-			tm = System.currentTimeMillis();
             scene.tick();
             if (gameViewer != null && gameViewer.getContinuousUpdatesState())
                 gameViewer.tick();
@@ -186,45 +183,40 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
             ((LevelScene) scene).mario.cheatKeys = cheatAgent.getAction(null);
 
             if (GlobalOptions.VisualizationOn) {
-            	if (GlobalOptions.drawText){
-                    String msg = "Attempt: " + currentAttempt + " of " + ((totalNumberOfAttempts == -1) ? "\\infty" : totalNumberOfAttempts);
-                    drawString(og, msg, 7, 31, 0);
-                    drawString(og, msg, 6, 30, 1);
 
-                    msg = agent.getName();
-                    drawString(og, msg, 7, 41, 0);
-                    drawString(og, msg, 6, 40, 5);
+                String msg = "Agent: " + agent.getName();
+                LevelScene.drawStringDropShadow(og, msg, 0, 7, 5);
 
-                    msg = "Selected Actions: ";
-                    drawString(og, msg, 7, 51, 0);
-                    drawString(og, msg, 6, 50, 6);
+                msg = "Selected Actions: ";
+                LevelScene.drawStringDropShadow(og, msg, 0, 8, 6);
 
-                    msg = "";
-                    if (action != null)
-                    {
-                        for (int i = 0; i < Environment.numberOfButtons; ++i)
-                            msg += (action[i]) ? scene.keysStr[i] : "      ";
-                    }
-                    else
-                        msg = "NULL";                    
-                    drawString(og, msg, 6, 70, 1);
+                msg = "";
+                if (action != null)
+                {
+                    for (int i = 0; i < Environment.numberOfButtons; ++i)
+                        msg += (action[i]) ? scene.keysStr[i] : "      ";
+                }
+                else
+                    msg = "NULL";                    
+                drawString(og, msg, 6, 78, 1);
+
+                if (!this.hasFocus() && tick / 4 % 2 == 0) {
+                    String msgClick = "CLICK TO PLAY";
+//                    og.setColor(Color.YELLOW);
+//                    og.drawString(msgClick, 320 + 1, 20 + 1);
+                    drawString(og, msgClick, 160 - msgClick.length() * 4, 110, 1);
+                    drawString(og, msgClick, 160 - msgClick.length() * 4, 110, 7);
+                }
+                og.setColor(Color.DARK_GRAY);
+                LevelScene.drawStringDropShadow(og, "FPS: ", 33, 2, 7);
+                LevelScene.drawStringDropShadow(og, ((GlobalOptions.FPS > 99) ? "\\infty" : GlobalOptions.FPS.toString()), 33, 3, 7);
+
+                msg = totalNumberOfTrials == -2 ? "" : currentTrial + "(" + ((totalNumberOfTrials == -1) ? "\\infty" : totalNumberOfTrials) + ")";
+
+                LevelScene.drawStringDropShadow(og, "Trial:", 33, 4, 7);
+                LevelScene.drawStringDropShadow(og, msg, 33, 5, 7);
 
 
-                    
-                    if (!this.hasFocus() && tick / 4 % 2 == 0) {
-                        String msgClick = "CLICK TO PLAY";
-//                        og.setColor(Color.YELLOW);
-//                        og.drawString(msgClick, 320 + 1, 20 + 1);
-                        drawString(og, msgClick, 160 - msgClick.length() * 4, 110, 1);
-                        drawString(og, msgClick, 160 - msgClick.length() * 4, 110, 7);
-                    }
-                    og.setColor(Color.DARK_GRAY);
-                    
-                    drawString(og, "FPS: " + ((GlobalOptions.FPS > 99) ? "\\infty" : GlobalOptions.FPS.toString()), 5, 22, 0);
-                    drawString(og, "FPS: " + ((GlobalOptions.FPS > 99) ? "\\infty" : GlobalOptions.FPS.toString()), 4, 21, 7);
-            		
-            	}
-            	
                 if (width != 320 || height != 240) {
                         g.drawImage(image, 0, 0, 640 * 2, 480 * 2, null);
                 } else {
@@ -244,7 +236,6 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
                 } catch (InterruptedException e) {
                     break;
                 }
-
             // Advance the frame
             frame++;
         }
@@ -265,6 +256,7 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
         evaluationInfo.totalActionsPerfomed = totalActionsPerfomed; // Counted during the play/simulation process
         evaluationInfo.totalFramesPerfomed = frame;
         evaluationInfo.marioMode = mario.getMode();
+        evaluationInfo.killsTotal = mario.world.killedCreaturesTotal;
 //        evaluationInfo.Memo = "Number of attempt: " + Mario.numberOfAttempts;
         if (agent instanceof ServerAgent && mario.keys != null /*this will happen if client quits unexpectedly in case of Server mode*/)
             ((ServerAgent)agent).integrateEvaluationInfo(evaluationInfo);
@@ -338,27 +330,56 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
         }
     }
 
-    // upcoming feature for Milano conf, unkomment this, if you would like to try it!
     // Chaning ZLevel during the game on-the-fly;
-    public byte[][] getCompleteObservation(/*int ZLevelMap, int ZLevelEnemies*/) {
-//        this.ZLevelMap = ZLevelMap;
-//        this.ZLevelEnemies = ZLevelEnemies;
+    public byte[][] getMergedObservationZ(int zLevelScene, int zLevelEnemies) {
         if (scene instanceof LevelScene)
-            return ((LevelScene) scene).mergedObservation(this.ZLevelMap, this.ZLevelEnemies);
+            return ((LevelScene) scene).mergedObservation(zLevelScene, zLevelEnemies);
         return null;
     }
 
-    public byte[][] getEnemiesObservation(/*int ZLevelEnemies*/) {
-//        this.ZLevelEnemies = ZLevelEnemies;
+    public byte[][] getLevelSceneObservationZ(int zLevelScene) {
+        if (scene instanceof LevelScene)
+            return ((LevelScene) scene).levelSceneObservation(zLevelScene);
+        return null;
+    }
+
+    public byte[][] getEnemiesObservationZ(int zLevelEnemies) {
+        if (scene instanceof LevelScene)
+            return ((LevelScene) scene).enemiesObservation(zLevelEnemies);
+        return null;
+    }
+
+    public int getKillsTotal() {
+        return mario.world.killedCreaturesTotal;
+    }
+
+    public int getKillsByFire() {
+        return mario.world.killedCreaturesByFireBall;
+    }
+
+    public int getKillsByStomp() {
+        return mario.world.killedCreaturesByStomp;
+    }
+
+    public int getKillsByShell() {
+        return mario.world.killedCreaturesByShell;
+    }
+
+    public byte[][] getCompleteObservation() {
+        if (scene instanceof LevelScene)
+            return ((LevelScene) scene).mergedObservation(this.ZLevelScene, this.ZLevelEnemies);
+        return null;
+    }
+
+    public byte[][] getEnemiesObservation() {
         if (scene instanceof LevelScene)
             return ((LevelScene) scene).enemiesObservation(this.ZLevelEnemies);
         return null;
     }
 
-    public byte[][] getLevelSceneObservation(/*int ZLevelMap*/) {
-//        this.ZLevelMap = ZLevelMap;
+    public byte[][] getLevelSceneObservation() {
         if (scene instanceof LevelScene)
-            return ((LevelScene) scene).levelSceneObservation(this.ZLevelMap);
+            return ((LevelScene) scene).levelSceneObservation(this.ZLevelScene);
         return null;
     }
 
@@ -380,6 +401,11 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
         }
     }
 
+    public void setMarioInvulnerable(boolean invulnerable)
+    {
+        Mario.isMarioInvulnerable = invulnerable;
+    }
+
     public void setPaused(boolean paused) {
         levelScene.paused = paused;
     }
@@ -388,8 +414,8 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
         this.ZLevelEnemies = ZLevelEnemies;
     }
 
-    public void setZLevelMap(int ZLevelMap) {
-        this.ZLevelMap = ZLevelMap;
+    public void setZLevelScene(int ZLevelScene) {
+        this.ZLevelScene = ZLevelScene;
     }
 
     public float[] getMarioFloatPos()

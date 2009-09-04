@@ -14,7 +14,7 @@ import ch.idsia.utils.StatisticalSummary;
 import java.util.List;
 
 import competition.cig.sergeykarakovskiy.SergeyKarakovskiy_JumpingAgent;
-import com.reddit.programming.mario.BestFirstAgent;
+import andysloane.BestFirstAgent;
 
 /**
  * Created by IntelliJ IDEA.

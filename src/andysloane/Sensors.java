@@ -1,4 +1,4 @@
-package com.reddit.programming.mario;
+package andysloane;
 
 import ch.idsia.mario.engine.sprites.Sprite;
 import ch.idsia.mario.environments.Environment;

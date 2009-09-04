@@ -1,4 +1,4 @@
-package com.reddit.programming.mario;
+package andysloane;
 
 import java.awt.Color;
 import ch.idsia.ai.agents.Agent;

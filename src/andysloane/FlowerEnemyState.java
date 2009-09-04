@@ -1,4 +1,4 @@
-package com.reddit.programming.mario;
+package andysloane;
 
 public final class FlowerEnemyState extends EnemyState
 {

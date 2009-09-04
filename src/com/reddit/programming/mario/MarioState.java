@@ -67,26 +67,12 @@ public final class MarioState extends SpriteState
 		n.action = action;
 		n.pred = this;
 
-		int jump_steps = action/ACT_JUMP;
-		if(jump_steps > 1) {
-			action = (action&7) + 8;
-			for(int i=0;i<jumpstep_table[jump_steps];i++) {
-				n.g = g + Tunables.GIncrement;
-				n.ws = ws;
-				n.move(action);
-				if(!hurtThisStep) {
-					n.ws = n.ws.step();
-					n.ws = n.ws.interact(n, false);
-				}
-			}
-		} else {
-			n.g = g + Tunables.GIncrement;
-			n.ws = ws;
-			n.move(action);
-			if(!hurtThisStep) {
-				n.ws = n.ws.step();
-				n.ws = n.ws.interact(n, false);
-			}
+		n.g = g + Tunables.GIncrement;
+		n.ws = ws;
+		n.move(action);
+		if(!hurtThisStep) {
+			n.ws = n.ws.step();
+			n.ws = n.ws.interact(n, false);
 		}
 
 		return n;

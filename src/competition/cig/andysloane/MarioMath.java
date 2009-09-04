@@ -1,4 +1,4 @@
-package andysloane;
+package competition.cig.andysloane;
 
 final class MarioMath {
 

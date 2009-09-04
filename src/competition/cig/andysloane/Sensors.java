@@ -1,4 +1,4 @@
-package andysloane;
+package competition.cig.andysloane;
 
 import ch.idsia.mario.engine.sprites.Sprite;
 import ch.idsia.mario.environments.Environment;

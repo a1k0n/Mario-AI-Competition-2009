@@ -1,4 +1,4 @@
-package andysloane;
+package competition.cig.andysloane;
 
 import java.io.IOException;
 import java.util.Comparator;

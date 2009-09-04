@@ -1,10 +1,10 @@
-package andysloane;
+package competition.cig.andysloane;
 
-public class ShellState extends SpriteState
+// not even started
+
+public class FireballState extends SpriteState
 {
-	public boolean carried = false;
 	public boolean onGround = false;
-	public boolean flyDeath = false;
 
 	public static final float width = 4;
 	public static final float height = 12;
@@ -14,21 +14,15 @@ public class ShellState extends SpriteState
 
 	@Override
 	public SpriteState clone() {
-		ShellState e = new ShellState(x,y,false);
+		FireballState e = new FireballState(x,y,false);
 		e.xa = xa; e.ya = ya;
 		e.facing = facing;
-		e.deadTime = deadTime;
-		e.carried = carried;
 		e.onGround = onGround;
-		e.flyDeath = flyDeath;
 		return e;
 	}
 
-	@Override
-	public final boolean dead() { return deadTime != 0; }
-
-	ShellState(float _x, float _y, boolean predicted) {
-		x=_x; y=_y; type=KIND_SHELL;
+	FireballState(float _x, float _y, boolean predicted) {
+		x=_x; y=_y; type=KIND_FIREBALL;
 		xa = 0;
 		ya = predicted ? -5 : -2.25f;
         facing = 0;
@@ -36,52 +30,6 @@ public class ShellState extends SpriteState
 
 	// returns false iff we should remove the enemy from the list
 	public boolean move(WorldState ws) {
-		if(carried) {
-			ws.checkShellCollide(this);
-			return false;
-		}
-
-		if (deadTime > 0) {
-			deadTime--;
-
-			// wait this is stupid.  this function NEVER RETURNS FALSE
-			if (deadTime == 0) {
-				deadTime = 1; // keep us marked dead even when the timer goes away
-				return false;
-			}
-
-			// we have to keep track of dead enemies so we can keep sync with their position
-			if (flyDeath) {
-				x += xa;
-				y += ya;
-				ya *= 0.95;
-				ya += 1;
-			}
-			return true;
-		}
-
-
-		float sideWaysSpeed = 11f;
-
-		if (xa > 2)
-			facing = 1;
-		else if (xa < -2)
-			facing = -1;
-
-		if (facing != 0)
-			ws.checkShellCollide(this);
-
-		if (!move(xa, 0, ws))
-			facing = -facing;
-
-		onGround = false;
-		move(0, ya, ws);
-		ya *= 0.85f;
-		xa *= DAMPING_X;
-
-		if (!onGround)
-			ya += 2;
-				
 		return true;
 	}
 
@@ -185,39 +133,8 @@ public class ShellState extends SpriteState
     }
 
 	@Override
-	public SpriteState stomp(WorldState ws, MarioState ms) {
-		ShellState e = (ShellState) clone();
-		if(facing != 0) {
-			e.facing = 0;
-			e.xa = 0;
-		} else {
-			e.facing = ms.facing;
-		}
-		return e;
-	}
-
-	@Override
     public WorldState collideCheck(WorldState ws, MarioState ms)
 	{
-		if (deadTime != 0) return ws;
-
-		float xMarioD = ms.x - x;
-		float yMarioD = ms.y - y;
-		float height = this.height();
-		if (xMarioD > -width*2-4 && xMarioD < width*2+4) {
-			if (yMarioD > -height && yMarioD < ms.height()) {
-				if (!spiky() && ms.ya > 0 && yMarioD <= 0 && (!ms.onGround || !ms.wasOnGround)) {
-					ws = ws.stomp(this, ms);
-				} else {
-					if(facing != 0)
-						ms.getHurt();
-					else {
-						ws.kick(this);
-						facing = ms.facing;
-					}
-				}
-			}
-		}
 		return ws;
 	}
 

@@ -1,4 +1,4 @@
-package andysloane;
+package competition.cig.andysloane;
 
 public final class FlowerEnemyState extends EnemyState
 {

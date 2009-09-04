@@ -14,7 +14,7 @@ import ch.idsia.utils.StatisticalSummary;
 import java.util.List;
 
 import competition.cig.sergeykarakovskiy.SergeyKarakovskiy_JumpingAgent;
-import andysloane.BestFirstAgent;
+import competition.cig.andysloane.AndySloane_BestFirstAgent;
 
 /**
  * Created by IntelliJ IDEA.
@@ -75,7 +75,7 @@ public class MainRun
         //    AgentsPool.addAgent(new AStarAgent());
 //            AgentsPool.addAgent(new RjAgent());
 //            AgentsPool.addAgent(new SergeyKarakovskiy_JumpingAgent());
-            AgentsPool.addAgent(new BestFirstAgent());
+            AgentsPool.addAgent(new AndySloane_BestFirstAgent());
         }
     }
 

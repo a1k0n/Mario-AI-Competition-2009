@@ -1,15 +1,15 @@
-package andysloane;
+package competition.cig.andysloane;
 
 import java.awt.Color;
 import ch.idsia.ai.agents.Agent;
 
-public final class BestFirstAgent extends HeuristicSearchingAgent
+public final class AndySloane_BestFirstAgent extends HeuristicSearchingAgent
 {
 	private PrioQ pq;
 	private static final int maxSteps = 1000;
 
-	public BestFirstAgent() {
-		super("Tuned BestFirstAgent");
+	public AndySloane_BestFirstAgent() {
+		super("AndySloane_BestFirstAgent");
 	}
 
 	@Override

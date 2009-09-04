@@ -10,7 +10,8 @@ Sloane <andy@a1k0n.net>, with help from the following people:
    <peter@metaweb.com>
  - Visualization and debugging from Caleb Anderson <caleb@l0ser.net>.
 
-This archive unpacks this README and andysloane/*.java
+This archive unpacks this README and competition/cig/andysloane/*.java.  The
+agent is competition.cig.andysloane.AndySloane_BestFirstAgent.
 
 The competition score results I get on seed 0 are:
 Difficulty 0 score 11606.4000 (avg time 2.4181)

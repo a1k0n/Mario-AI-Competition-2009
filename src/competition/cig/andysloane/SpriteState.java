@@ -1,4 +1,4 @@
-package andysloane;
+package competition.cig.andysloane;
 
 public class SpriteState
 {

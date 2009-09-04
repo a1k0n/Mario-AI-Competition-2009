@@ -71,7 +71,7 @@ public final class MarioState extends SpriteState
 		if(jump_steps > 1) {
 			action = (action&7) + 8;
 			for(int i=0;i<jumpstep_table[jump_steps];i++) {
-				n.g = g + 1;
+				n.g = g + Tunables.GIncrement;
 				n.ws = ws;
 				n.move(action);
 				if(!hurtThisStep) {
@@ -80,7 +80,7 @@ public final class MarioState extends SpriteState
 				}
 			}
 		} else {
-			n.g = g + 1;
+			n.g = g + Tunables.GIncrement;
 			n.ws = ws;
 			n.move(action);
 			if(!hurtThisStep) {

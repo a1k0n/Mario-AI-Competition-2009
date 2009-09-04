@@ -1,0 +1,70 @@
+programming.reddit.com team's Mario AI Competition entry
+========================================================
+
+This is a relatively simple best-first-search agent primarily written by Andy
+Sloane <andy@a1k0n.net>, with help from the following people:
+
+ - Heuristic tuning and optimized priority queue code by Bart van der Werf
+   <bluelive@gmail.com>
+ - Refactoring, project management, and threading code by Peter Burns
+   <peter@metaweb.com>
+ - Visualization and debugging from Caleb Anderson <caleb@l0ser.net>.
+
+This archive unpacks this README and andysloane/*.java
+
+The competition score results I get on seed 0 are:
+Difficulty 0 score 11606.4000 (avg time 2.4181)
+Difficulty 3 score 11595.2000 (avg time 4.4604)
+Difficulty 5 score 11614.4000 (avg time 5.4425)
+Difficulty 10 score 11595.2000 (avg time 6.3712)
+Competition score: 46411.2
+
+
+Number of levels cleared = 40
+Additional (tie-breaker) info: 
+Total time left = 4905
+Total kills = 333
+Mario mode (small, large, fire) sum = 49
+
+
+How does it work?
+=================
+
+In short, it directly searches state space for the optimal action.  It has
+its own copy of the "rules" of the game of Mario: which actions cause which
+responses, and how enemies react to everything, etc.  Mario is a completely
+deterministic game, so it isn't very hard to predict and thus I didn't even
+consider a full-fledged learning algorithm, except perhaps as a heuristic
+to guide the search.
+
+So it does an A* search with the heuristic cost of "number of time steps
+necessary to reach the right side of screen".  MarioMath.java has a number
+of closed-form solutions to the recurrences in Mario movements (Mario's
+velocity is exponentially damped, reaching an asymptote of
+1.2*0.89/(1-0.89) = 9.70909...).  The "steps to run x units" function is
+solved using the secant method.
+
+The physics simulation is totally independent of the game's physics
+simulation, and is written in a mixture of functional and imperitave styles
+which attempt to maximize sharing of state between different search
+iterations.
+
+The forward prediction of enemies from their initial positions isn't perfect,
+but much improved from our first submission.  Fireballs are still not
+predicted, so Mario only shoots enemies by accident.  The timing of cannon
+shots are also not predicted, and I know some of our competitors are predicting
+those, so being surprised by Bullet Bills could be a determining factor in the
+contest.
+
+The A* heuristic is also much improved.  Of chief importance is that whenever
+Mario is in the air, the jump is projected forward by holding down
+jump+speed+(left or right) until Mario lands or falls into a hole.  If falling
+into a hole is unavoidable by moving left or right in the jump, then the search
+tree is pruned early.  As a result, this agent basically never falls into
+holes.
+
+There are a few tunable parameters for the heuristic in Tunables.java, but
+changing any of them can either make the A* heuristic inadmissible or make the
+search needlessly broad.  For the competition entry, they have all been set to
+neutral values.
+

@@ -219,7 +219,7 @@ public abstract class HeuristicSearchingAgent implements Agent
 					// but it will happen when we win, cuz we have no idea we won
 					// and it won't let us move.  well, let's guess whether we won:
 					if(mpos[0] > 4000 && mpos[0] == ms_prev.x && mpos[1] == ms_prev.y) {
-						System.out.println("ack, can't move.  assuming we just won");
+						//System.out.println("ack, can't move.  assuming we just won");
 						won = true;
 						return action;
 					}
